@@ -4,6 +4,7 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Hheader from "./components/Hheader";
+import Footer from './components/Footer'
 import {Table,Button} from 'reactstrap'
 
 class App extends React.Component {
@@ -11,6 +12,7 @@ class App extends React.Component {
     return (
       <>
         <Hheader></Hheader>
+        <Footer></Footer>
       </>
     );
   }
