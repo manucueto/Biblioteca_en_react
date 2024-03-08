@@ -1,10 +1,9 @@
-import React from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Hheader from "./components/Hheader";
 import Footer from "./components/Footer";
+
 import {
   Table,
   Button,
@@ -16,38 +15,56 @@ import {
   ModalFooter,
 } from "reactstrap";
 
-const data = [
-  {
-    id: 1,
-    nombre_libro: "Codigo Da Vinci",
-    nombre_autor: "Dan",
-    apellido_autor: "Brown",
-    fecha_nacimiento: "22-06-1964",
-    fecha_fallecimiento: "",
-    genero_libro: "novela policíaca/ficción",
-    fecha_publicacion: "01-04-2003",
-    editorial: "Random House",
-    foto_portada: "",
-  },
-];
-
 class App extends React.Component {
-  state = {
-    data: data,
-    form: {
-      id: "",
-      nombre_libro: "",
-      nombre_autor: "",
-      apellido_autor: "",
-      fecha_nacimiento: "",
-      fecha_fallecimiento: "",
-      genero_libro: "",
-      fecha_publicacion: "",
-      editorial: "",
-      foto_portada: "",
-    },
-    modalInsertar: false,
-    modalEditar: false,
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedImage: null,
+      data: [
+        {
+          id: 1,
+          nombre_libro: "ValorDeseado",
+          nombres_autor: "Dan",
+          fecha_nacimiento: "22-06-1964",
+          fecha_fallecimiento: "",
+          genero_libro: "novela policíaca/ficción",
+          fecha_publicacion: "01-04-2003",
+          editorial: "Random House",
+          foto_portada: null,
+        },
+      ],
+      form: {
+        id: "",
+        nombre_libro: "",
+        nombres_autor: "",
+
+        fecha_nacimiento: "",
+        fecha_fallecimiento: "",
+        genero_libro: "",
+        fecha_publicacion: "",
+        editorial: "",
+        foto_portada: "",
+      },
+      modalInsertar: false,
+      modalEditar: false,
+      buscador: false,
+      input_buscador: "",
+    };
+  }
+  hableInputBuscador = (e) => {
+    this.setState({
+      input_buscador: document.getElementById("buscador_input").value,
+    });
+  };
+
+  handleBuscadorChangeActivar = (e) => {
+    this.setState({ buscador: true });
+    console.log("entro al handle");
+  };
+
+  handleBuscadorChangeDesactivar = (e) => {
+    this.setState({ buscador: false });
+    console.log("entro al handle desac");
   };
 
   handleChange = (e) => {
@@ -58,68 +75,75 @@ class App extends React.Component {
       },
     });
   };
-  
-  mostrarModalInsertar=()=>{
-    this.setState({modalInsertar: true});
-  }
-  ocultarModalInsertar=()=>{
-    this.setState({modalInsertar: false});
-  }
+
+  handleImageChange = (event) => {
+    const file = event.target.files[0];
+    const blob = new Blob([file], { type: file.type }); // Crear un objeto Blob
+    this.setState({
+      selectedImage: file,
+      form: {
+        ...this.state.form,
+        foto_portada: blob, // Asignar el objeto Blob a la propiedad foto_portada
+      },
+    });
+  };
+
+  mostrarModalInsertar = () => {
+    this.setState({ modalInsertar: true });
+  };
+  ocultarModalInsertar = () => {
+    this.setState({ modalInsertar: false });
+  };
 
   mostrarModalEditar = (Registro) => {
     this.setState({ modalEditar: true, form: Registro });
   };
 
-
   ocultarModalEditar = () => {
     this.setState({ modalEditar: false });
   };
 
-  insertar=()=>{
-    var valornuevo={...this.state.form};
-    valornuevo.id=this.state.data.length+1;
-    var lista=this.state.data;
+  insertar = () => {
+    var valornuevo = { ...this.state.form };
+    valornuevo.id = this.state.data.length + 1;
+    var lista = this.state.data;
     lista.push(valornuevo);
-    this.setState({data: lista, modalInsertar: false});
-  }
+    this.setState({ data: lista, modalInsertar: false });
+  };
 
-  editar=(dato)=>{
-    var contador=0;
-    var lista=this.state.data;
-    lista.map((Registro)=>{
-      if(dato.id==Registro.id){
-        lista[contador].nombre_libro=dato.nombre_libro;
-        lista[contador].nombre_autor=dato.nombre_autor;
-        lista[contador].apellido_autor=dato.apellido_autor;
-        lista[contador].fecha_nacimiento=dato.fecha_nacimiento;
-        lista[contador].fecha_fallecimiento=dato.fecha_fallecimiento;
-        lista[contador].genero_libro=dato.genero_libro;
-        lista[contador].fecha_publicacion=dato.fecha_publicacion;
-        lista[contador].editorial=dato.editorial;
-        lista[contador].foto_portada=dato.foto_portada;
+  editar = (dato) => {
+    var contador = 0;
+    var lista = this.state.data;
+    lista.map((Registro) => {
+      if (dato.id == Registro.id) {
+        lista[contador].nombre_libro = dato.nombre_libro;
+        lista[contador].nombres_autor = dato.nombres_autor;
+        lista[contador].fecha_nacimiento = dato.fecha_nacimiento;
+        lista[contador].fecha_fallecimiento = dato.fecha_fallecimiento;
+        lista[contador].genero_libro = dato.genero_libro;
+        lista[contador].fecha_publicacion = dato.fecha_publicacion;
+        lista[contador].editorial = dato.editorial;
+        lista[contador].foto_portada = dato.foto_portada;
       }
       contador++;
     });
-    this.setState({data: lista, modalEditar: false});
-  }
+    this.setState({ data: lista, modalEditar: false });
+  };
 
-  eliminar=(dato)=>{
-    var opcion=window.confirm("Quiere eliminar el registro?" +dato.id);
-    if(opcion){
-      var contador=0;
+  eliminar = (dato) => {
+    var opcion = window.confirm("Quiere eliminar el registro? " );
+    if (opcion) {
+      var contador = 0;
       var lista = this.state.data;
-      lista.map((Registro)=>{
-        if(Registro.id==dato.id){
+      lista.map((Registro) => {
+        if (Registro.id == dato.id) {
           lista.splice(contador, 1);
         }
         contador++;
       });
-      this.setState({data: lista});
+      this.setState({ data: lista });
     }
-  }
-
-
-
+  };
 
   render() {
     return (
@@ -128,18 +152,52 @@ class App extends React.Component {
         <Container>
           <br />
           <br />
-          <Button color="warning" onClick={()=>this.mostrarModalInsertar()}>
-            Insertar nuevo libro
-          </Button>
-          <br />
+          <div
+            className="
+          grid grid-cols-2 gap-4 "
+          >
+            <Button
+              color="warning"
+              className="w-1/3 bg-amber-400"
+              onClick={() => this.mostrarModalInsertar()}
+            >
+              Insertar nuevo libro
+            </Button>
+            <div className="grid grid-cols-3 gap-1 ml-60">
+              
+              <input
+                className="form-control "
+                type="text"
+                name="buscador"
+                id="buscador_input"
+              />
+
+              <Button
+                color="primary"
+                className="w-75 bg-blue-500"
+                onClick={() => {
+                  this.handleBuscadorChangeActivar();
+                  this.hableInputBuscador();
+                }}
+              >
+                Buscar
+              </Button>
+
+              <Button
+                className="w-75  bg-slate-500"
+                onClick={() => this.handleBuscadorChangeDesactivar()}
+              >
+                Cancelar
+              </Button>
+            </div>
+          </div>
           <br />
 
           <Table>
             <thead>
               <tr>
                 <th>Nombre del libro: </th>
-                <th>Nombre del Autor</th>
-                <th>Apellido del autor</th>
+                <th className="w-1/6">Nombres completos de los autores</th>
                 <th>Fecha de nacimiento del autor</th>
                 <th>Fecha de fallecimiento</th>
                 <th>Genero del libro</th>
@@ -150,25 +208,96 @@ class App extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.data.map((elemento) => (
-                <tr>
-                  <td>{elemento.nombre_libro}</td>
-                  <td>{elemento.nombre_autor}</td>
-                  <td>{elemento.apellido_autor}</td>
-                  <td>{elemento.fecha_nacimiento}</td>
-                  <td>{elemento.fecha_fallecimiento}</td>
-                  <td>{elemento.genero_libro}</td>
-                  <td>{elemento.fecha_publicacion}</td>
-                  <td>{elemento.editorial}</td>
-                  <td>{elemento.foto_portada}</td>
-                  <td>
-                    <Button color="primary" onClick={()=>this.mostrarModalEditar(elemento)}>Editar</Button>
-                  </td>
-                  <td>
-                    <Button color="danger" onClick={()=>this.eliminar(elemento)}>Eliminar</Button>
-                  </td>
-                </tr>
-              ))}
+              {this.state.buscador
+                ? this.state.data.map((elemento) =>
+                    elemento.nombre_libro === this.state.input_buscador ||
+                    elemento.nombres_autor === this.state.input_buscador ? (
+                      <tr>
+                        <td>{elemento.nombre_libro}</td>
+                        <td>{elemento.nombres_autor}</td>
+                        <td>{elemento.fecha_nacimiento}</td>
+                        <td>{elemento.fecha_fallecimiento}</td>
+                        <td>{elemento.genero_libro}</td>
+                        <td>{elemento.fecha_publicacion}</td>
+                        <td>{elemento.editorial}</td>
+
+                        <td>
+                          {elemento.foto_portada !== undefined && (
+                            <img
+                              src={
+                                elemento.foto_portada
+                                  ? URL.createObjectURL(elemento.foto_portada)
+                                  : null
+                              }
+                              alt="Imagen seleccionada"
+                            />
+                          )}
+                        </td>
+                        <td>
+                          <Button
+                            color="primary"
+                            className="bg-blue-500"
+                            onClick={() => this.mostrarModalEditar(elemento)}
+                          >
+                            Editar
+                          </Button>
+                        </td>
+                        <td>
+                          <Button
+                            color="danger"
+                            className="bg-red-500"
+                            onClick={() => this.eliminar(elemento)}
+                          >
+                            Eliminar
+                          </Button>
+                        </td>
+                      </tr>
+                    ) : (
+                      ""
+                    )
+                  )
+                : this.state.data.map((elemento) => (
+                    <tr>
+                      <td>{elemento.nombre_libro}</td>
+                      <td>{elemento.nombres_autor}</td>
+                      <td>{elemento.fecha_nacimiento}</td>
+                      <td>{elemento.fecha_fallecimiento}</td>
+                      <td>{elemento.genero_libro}</td>
+                      <td>{elemento.fecha_publicacion}</td>
+                      <td>{elemento.editorial}</td>
+                      <td>
+                        {elemento.foto_portada !== undefined && (
+                          <img
+                            src={
+                              elemento.foto_portada
+                                ? URL.createObjectURL(elemento.foto_portada)
+                                : null
+                            }
+                            alt="Imagen seleccionada"
+                          />
+                        )}
+                      </td>
+                      <td>
+                        <Button
+                          color="primary"
+                           className="bg-blue-500"   
+                          onClick={() => this.mostrarModalEditar(elemento)}
+                        >
+                          Editar
+                        </Button>
+                      </td>
+                      <td>
+                        <Button
+                          color="danger"
+                           className="bg-red-600" 
+                          onClick={() => this.eliminar(elemento)}
+                        >
+                          Eliminar
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+              {}
             </tbody>
           </Table>
         </Container>
@@ -185,10 +314,10 @@ class App extends React.Component {
               <label>Id:</label>
 
               <input
-                className="form-control"
+                className="form-control bg-slate-300"
                 readOnly
-                type="text" value={this.state.form.id}
-                
+                type="text"
+                value={this.state.form.id}
               />
             </FormGroup>
 
@@ -204,32 +333,22 @@ class App extends React.Component {
             </FormGroup>
 
             <FormGroup>
-              <label>Nombre del Autor</label>
+              <label>Nombres completos de los Autores</label>
               <input
                 className="form-control"
-                name="nombre_autor"
+                name="nombres_autor"
                 type="text"
                 onChange={this.handleChange}
-                value={this.state.form.nombre_autor}
+                value={this.state.form.nombres_autor}
               />
             </FormGroup>
 
-            <FormGroup>
-              <label>Apellido del Autor</label>
-              <input
-                className="form-control"
-                name="apellido_autor"
-                type="text"
-                onChange={this.handleChange}
-                value={this.state.form.apellido_autor}
-              />
-            </FormGroup>
             <FormGroup>
               <label>Fecha de nacimiento del autor</label>
               <input
                 className="form-control"
                 name="fecha_nacimiento"
-                type="text"
+                type="date"
                 onChange={this.handleChange}
                 value={this.state.form.fecha_nacimiento}
               />
@@ -239,7 +358,7 @@ class App extends React.Component {
               <input
                 className="form-control"
                 name="fecha_fallecimiento"
-                type="text"
+                type="date"
                 onChange={this.handleChange}
                 value={this.state.form.fecha_fallecimiento}
               />
@@ -283,32 +402,27 @@ class App extends React.Component {
               <input
                 className="form-control"
                 name="foto_portada"
-                type="text"
-                onChange={this.handleChange}
-                value={this.state.form.foto_portada}
+                type="file"
+                accept="image/*"
+                onChange={(event) => {
+                  this.handleImageChange(event);
+                }}
               />
             </FormGroup>
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              color="primary" onClick={()=>this.insertar()}
-            
-            >
+            <Button color="primary"  className="bg-blue-500" onClick={() => this.insertar()}>
               Insertar
             </Button>
-            <Button color="danger" onClick={()=>this.ocultarModalInsertar()}>
+            <Button color="danger" className="bg-red-500" onClick={() => this.ocultarModalInsertar()}>
               Cancelar
             </Button>
           </ModalFooter>
         </Modal>
 
-        
-
-
-
         <Modal isOpen={this.state.modalEditar}>
-        <ModalHeader>
+          <ModalHeader>
             <div>
               <h3>Editar Registro</h3>
             </div>
@@ -319,10 +433,10 @@ class App extends React.Component {
               <label>Id:</label>
 
               <input
-                className="form-control"
+                className="form-control bg-slate-300"
                 readOnly
-                type="text" value={this.state.form.id}
-                
+                type="text"
+                value={this.state.form.id}
               />
             </FormGroup>
 
@@ -338,32 +452,22 @@ class App extends React.Component {
             </FormGroup>
 
             <FormGroup>
-              <label>Nombre del Autor</label>
+              <label>Nombres completos de los Autores</label>
               <input
                 className="form-control"
-                name="nombre_autor"
+                name="nombres_autor"
                 type="text"
                 onChange={this.handleChange}
-                value={this.state.form.nombre_autor}
+                value={this.state.form.nombres_autor}
               />
             </FormGroup>
 
-            <FormGroup>
-              <label>Apellido del Autor</label>
-              <input
-                className="form-control"
-                name="apellido_autor"
-                type="text"
-                onChange={this.handleChange}
-                value={this.state.form.apellido_autor}
-              />
-            </FormGroup>
             <FormGroup>
               <label>Fecha de nacimiento del autor</label>
               <input
                 className="form-control"
                 name="fecha_nacimiento"
-                type="text"
+                type="date"
                 onChange={this.handleChange}
                 value={this.state.form.fecha_nacimiento}
               />
@@ -373,7 +477,7 @@ class App extends React.Component {
               <input
                 className="form-control"
                 name="fecha_fallecimiento"
-                type="text"
+                type="date"
                 onChange={this.handleChange}
                 value={this.state.form.fecha_fallecimiento}
               />
@@ -417,31 +521,30 @@ class App extends React.Component {
               <input
                 className="form-control"
                 name="foto_portada"
-                type="text"
-                onChange={this.handleChange}
-                value={this.state.form.foto_portada}
+                type="file"
+                accept="image/*"
+                onChange={(event) => {
+                  this.handleChange(event);
+                  this.handleImageChange(event);
+                }}
               />
             </FormGroup>
           </ModalBody>
 
           <ModalFooter>
             <Button
-              color="primary" onClick={()=>this.editar(this.state.form)}
-            
+              color="primary"
+              className="bg-blue-600"
+              onClick={() => this.editar(this.state.form)}
             >
               Editar
             </Button>
-            <Button color="danger" onClick={()=>this.ocultarModalEditar()}>
+            <Button color="danger" className="bg-red-600" onClick={() => this.ocultarModalEditar()}>
               Cancelar
             </Button>
           </ModalFooter>
         </Modal>
 
-
-
-
-
-        
         <Footer></Footer>
       </>
     );
