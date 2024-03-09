@@ -4,6 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Hheader from "./components/Hheader";
 import Footer from "./components/Footer";
 
+import { useForm } from 'react-hook-form';
+
 import {
   Table,
   Button,
@@ -15,23 +17,61 @@ import {
   ModalFooter,
 } from "reactstrap";
 
+
+
 class App extends React.Component {
+  
   constructor(props) {
     super(props);
     this.state = {
       selectedImage: null,
+      
       data: [
         {
           id: 1,
-          nombre_libro: "ValorDeseado",
-          nombres_autor: "Dan",
-          fecha_nacimiento: "22-06-1964",
+          nombre_libro: "Codigo da vinci",
+          nombres_autor: "Dan Brown",
+          fecha_nacimiento: "1964-06-22",
           fecha_fallecimiento: "",
           genero_libro: "novela policíaca/ficción",
-          fecha_publicacion: "01-04-2003",
+          fecha_publicacion: "2003-04-01",
           editorial: "Random House",
-          foto_portada: null,
+          foto_portada: "",
         },
+        {
+          id: 2,
+          nombre_libro: "Fortaleza Digital",
+          nombres_autor: "Dan Brown",
+          fecha_nacimiento: "1964-06-22",
+          fecha_fallecimiento: "",
+          genero_libro: "Misterio/Ciencia ficción",
+          fecha_publicacion: "1998-02-01",
+          editorial: "Arqueiro",
+          foto_portada: "",
+        },
+        {
+          id: 3,
+          nombre_libro: "Bajo la misma estrella",
+          nombres_autor: "John Green",
+          fecha_nacimiento: "1977-08-24",
+          fecha_fallecimiento: "",
+          genero_libro: "Ficcion realista",
+          fecha_publicacion: "2003-04-01",
+          editorial: "DEBOLSILLO",
+          foto_portada: "",
+        },
+        {
+          id: 4,
+          nombre_libro: "Doña Bárbara",
+          nombres_autor: "Rómulo Gallegos",
+          fecha_nacimiento: "1884-08-02",
+          fecha_fallecimiento: "1969-04-05",
+          genero_libro: "Ficcion realista",
+          fecha_publicacion: "1929-08-11",
+          editorial: "Panapo",
+          foto_portada: "",
+        },
+        
       ],
       form: {
         id: "",
@@ -50,7 +90,10 @@ class App extends React.Component {
       buscador: false,
       input_buscador: "",
     };
+    
   }
+  
+  
   hableInputBuscador = (e) => {
     this.setState({
       input_buscador: document.getElementById("buscador_input").value,
@@ -59,12 +102,12 @@ class App extends React.Component {
 
   handleBuscadorChangeActivar = (e) => {
     this.setState({ buscador: true });
-    console.log("entro al handle");
+
   };
 
   handleBuscadorChangeDesactivar = (e) => {
     this.setState({ buscador: false });
-    console.log("entro al handle desac");
+    
   };
 
   handleChange = (e) => {
@@ -131,7 +174,7 @@ class App extends React.Component {
   };
 
   eliminar = (dato) => {
-    var opcion = window.confirm("Quiere eliminar el registro? " );
+    var opcion = window.confirm("Quiere eliminar el registro? ");
     if (opcion) {
       var contador = 0;
       var lista = this.state.data;
@@ -144,17 +187,19 @@ class App extends React.Component {
       this.setState({ data: lista });
     }
   };
-
+  
   render() {
+    
+
     return (
       <>
         <Hheader></Hheader>
-        <Container>
+        <Container >
           <br />
           <br />
           <div
             className="
-          grid grid-cols-2 gap-4 "
+            aja "
           >
             <Button
               color="warning"
@@ -163,8 +208,7 @@ class App extends React.Component {
             >
               Insertar nuevo libro
             </Button>
-            <div className="grid grid-cols-3 gap-1 ml-60">
-              
+            <div className="gridd">
               <input
                 className="form-control "
                 type="text"
@@ -174,7 +218,7 @@ class App extends React.Component {
 
               <Button
                 color="primary"
-                className="w-75 bg-blue-500"
+                className=" bg-blue-500"
                 onClick={() => {
                   this.handleBuscadorChangeActivar();
                   this.hableInputBuscador();
@@ -184,7 +228,7 @@ class App extends React.Component {
               </Button>
 
               <Button
-                className="w-75  bg-slate-500"
+                className=" bg-slate-500"
                 onClick={() => this.handleBuscadorChangeDesactivar()}
               >
                 Cancelar
@@ -192,18 +236,18 @@ class App extends React.Component {
             </div>
           </div>
           <br />
-
+          <div className="overflow-x-auto">
           <Table>
             <thead>
               <tr>
                 <th>Nombre del libro: </th>
                 <th className="w-1/6">Nombres completos de los autores</th>
                 <th>Fecha de nacimiento del autor</th>
-                <th>Fecha de fallecimiento</th>
+                <th className="hidden lg:table-cell">Fecha de fallecimiento</th>
                 <th>Genero del libro</th>
                 <th>Fecha de publicacion</th>
                 <th>Editorial</th>
-                <th>Foto portada</th>
+                <th className="hidden sm:table-cell">Foto portada</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -216,12 +260,12 @@ class App extends React.Component {
                         <td>{elemento.nombre_libro}</td>
                         <td>{elemento.nombres_autor}</td>
                         <td>{elemento.fecha_nacimiento}</td>
-                        <td>{elemento.fecha_fallecimiento}</td>
+                        <td className="hidden lg:table-cell">{elemento.fecha_fallecimiento}</td>
                         <td>{elemento.genero_libro}</td>
                         <td>{elemento.fecha_publicacion}</td>
                         <td>{elemento.editorial}</td>
 
-                        <td>
+                        <td className="hidden sm:table-cell">
                           {elemento.foto_portada !== undefined && (
                             <img
                               src={
@@ -229,7 +273,7 @@ class App extends React.Component {
                                   ? URL.createObjectURL(elemento.foto_portada)
                                   : null
                               }
-                              alt="Imagen seleccionada"
+                              alt=""
                             />
                           )}
                         </td>
@@ -261,11 +305,11 @@ class App extends React.Component {
                       <td>{elemento.nombre_libro}</td>
                       <td>{elemento.nombres_autor}</td>
                       <td>{elemento.fecha_nacimiento}</td>
-                      <td>{elemento.fecha_fallecimiento}</td>
+                      <td className="hidden lg:table-cell">{elemento.fecha_fallecimiento}</td>
                       <td>{elemento.genero_libro}</td>
                       <td>{elemento.fecha_publicacion}</td>
                       <td>{elemento.editorial}</td>
-                      <td>
+                      <td className="hidden sm:table-cell">
                         {elemento.foto_portada !== undefined && (
                           <img
                             src={
@@ -273,14 +317,14 @@ class App extends React.Component {
                                 ? URL.createObjectURL(elemento.foto_portada)
                                 : null
                             }
-                            alt="Imagen seleccionada"
+                            alt=""
                           />
                         )}
                       </td>
                       <td>
                         <Button
                           color="primary"
-                           className="bg-blue-500"   
+                          className="bg-blue-500"
                           onClick={() => this.mostrarModalEditar(elemento)}
                         >
                           Editar
@@ -289,7 +333,7 @@ class App extends React.Component {
                       <td>
                         <Button
                           color="danger"
-                           className="bg-red-600" 
+                          className="bg-red-600"
                           onClick={() => this.eliminar(elemento)}
                         >
                           Eliminar
@@ -300,125 +344,139 @@ class App extends React.Component {
               {}
             </tbody>
           </Table>
+          </div>
         </Container>
 
         <Modal isOpen={this.state.modalInsertar}>
-          <ModalHeader>
-            <div>
-              <h3>Insertar Registro</h3>
-            </div>
-          </ModalHeader>
+          <form>
+            <ModalHeader>
+              <div>
+                <h3>Insertar Registro</h3>
+              </div>
+            </ModalHeader>
 
-          <ModalBody>
-            <FormGroup>
-              <label>Id:</label>
+            <ModalBody>
+              <FormGroup>
+                <label>Id:</label>
 
-              <input
-                className="form-control bg-slate-300"
-                readOnly
-                type="text"
-                value={this.state.form.id}
-              />
-            </FormGroup>
+                <input
+                  className="form-control bg-slate-300"
+                  readOnly
+                  type="text"
+                  value={this.state.form.id}
+                />
+              </FormGroup>
 
-            <FormGroup>
-              <label>Nombre del libro</label>
-              <input
-                className="form-control"
-                name="nombre_libro"
-                type="text"
-                onChange={this.handleChange}
-                value={this.state.form.nombre_libro}
-              />
-            </FormGroup>
+              <FormGroup>
+                <label>Nombre del libro</label>
+                <input
+                  className="form-control"
+                  name="nombre_libro"
+                  type="text"
+                  onChange={this.handleChange}
+                  value={this.state.form.nombre_libro}
+                />
+              </FormGroup>
 
-            <FormGroup>
-              <label>Nombres completos de los Autores</label>
-              <input
-                className="form-control"
-                name="nombres_autor"
-                type="text"
-                onChange={this.handleChange}
-                value={this.state.form.nombres_autor}
-              />
-            </FormGroup>
+              <FormGroup>
+                <label>Nombres completos de los Autores</label>
+                <input
+                  
+                  className="form-control"
+                  name="nombres_autor"
+                  type="text"
+                  onChange={this.handleChange}
+                  value={this.state.form.nombres_autor}
+                />
+                
+              </FormGroup>
 
-            <FormGroup>
-              <label>Fecha de nacimiento del autor</label>
-              <input
-                className="form-control"
-                name="fecha_nacimiento"
-                type="date"
-                onChange={this.handleChange}
-                value={this.state.form.fecha_nacimiento}
-              />
-            </FormGroup>
-            <FormGroup>
-              <label>Fecha de fallecimiento del autor</label>
-              <input
-                className="form-control"
-                name="fecha_fallecimiento"
-                type="date"
-                onChange={this.handleChange}
-                value={this.state.form.fecha_fallecimiento}
-              />
-            </FormGroup>
+              <FormGroup>
+                <label>Fecha de nacimiento del autor</label>
+                <input
+                  className="form-control"
+                  name="fecha_nacimiento"
+                  type="date"
+                  onChange={this.handleChange}
+                  value={this.state.form.fecha_nacimiento}
+                />
+              </FormGroup>
+              <FormGroup>
+                <label>Fecha de fallecimiento del autor</label>
+                <input
+                  className="form-control"
+                  name="fecha_fallecimiento"
+                  type="date"
+                  onChange={this.handleChange}
+                  value={this.state.form.fecha_fallecimiento}
+                />
+              </FormGroup>
 
-            <FormGroup>
-              <label>Genero del libro</label>
-              <input
-                className="form-control"
-                name="genero_libro"
-                type="text"
-                onChange={this.handleChange}
-                value={this.state.form.genero_libro}
-              />
-            </FormGroup>
+              <FormGroup>
+                <label>Genero del libro</label>
+                <input
+                  className="form-control"
+                  name="genero_libro"
+                  type="text"
+                  onChange={this.handleChange}
+                  value={this.state.form.genero_libro}
+                />
+              </FormGroup>
 
-            <FormGroup>
-              <label>Fecha de publicación</label>
-              <input
-                className="form-control"
-                name="fecha_publicacion"
-                type="text"
-                onChange={this.handleChange}
-                value={this.state.form.fecha_publicacion}
-              />
-            </FormGroup>
+              <FormGroup>
+                <label>Fecha de publicación</label>
+                <input
+                  className="form-control"
+                  name="fecha_publicacion"
+                  type="date"
+                  onChange={this.handleChange}
+                  value={this.state.form.fecha_publicacion}
+                />
+              </FormGroup>
 
-            <FormGroup>
-              <label>Editorial</label>
-              <input
-                className="form-control"
-                name="editorial"
-                type="text"
-                onChange={this.handleChange}
-                value={this.state.form.editorial}
-              />
-            </FormGroup>
+              <FormGroup>
+                <label>Editorial</label>
+                <input
+                  className="form-control"
+                  name="editorial"
+                  type="text"
+                  onChange={this.handleChange}
+                  value={this.state.form.editorial}
+                />
+              </FormGroup>
 
-            <FormGroup>
-              <label>Foto de portada</label>
-              <input
-                className="form-control"
-                name="foto_portada"
-                type="file"
-                accept="image/*"
-                onChange={(event) => {
-                  this.handleImageChange(event);
-                }}
-              />
-            </FormGroup>
-          </ModalBody>
+              <FormGroup>
+                <label>Foto de portada</label>
+                <input
+                  className="form-control"
+                  name="foto_portada"
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => {
+                    this.handleImageChange(event);
+                  }}
+                />
+              </FormGroup>
+            </ModalBody>
 
-          <ModalFooter>
-            <Button color="primary"  className="bg-blue-500" onClick={() => this.insertar()}>
-              Insertar
-            </Button>
-            <Button color="danger" className="bg-red-500" onClick={() => this.ocultarModalInsertar()}>
-              Cancelar
-            </Button>
-          </ModalFooter>
+            <ModalFooter>
+              <Button
+                color="primary"
+                className="bg-blue-500"
+                onClick={() => this.insertar()}
+              >
+                Insertar
+              </Button>
+
+              <Button
+                color="danger"
+                className="bg-red-500"
+                onClick={() => this.ocultarModalInsertar()}
+              >
+                Cancelar
+              </Button>
+            </ModalFooter>
+          </form>
         </Modal>
 
         <Modal isOpen={this.state.modalEditar}>
@@ -499,7 +557,7 @@ class App extends React.Component {
               <input
                 className="form-control"
                 name="fecha_publicacion"
-                type="text"
+                type="date"
                 onChange={this.handleChange}
                 value={this.state.form.fecha_publicacion}
               />
@@ -539,7 +597,11 @@ class App extends React.Component {
             >
               Editar
             </Button>
-            <Button color="danger" className="bg-red-600" onClick={() => this.ocultarModalEditar()}>
+            <Button
+              color="danger"
+              className="bg-red-600"
+              onClick={() => this.ocultarModalEditar()}
+            >
               Cancelar
             </Button>
           </ModalFooter>

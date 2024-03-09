@@ -4,6 +4,12 @@
   padding: 2rem;
   text-align: center;
 }
+img {
+  max-width: 200px;
+  max-height: 100px;
+  height: auto;
+  width: auto;
+}
 
 .logo {
   height: 6em;
@@ -39,4 +45,51 @@
 
 .read-the-docs {
   color: #888;
+}
+
+@media (min-width: 768px) {
+  /* Estilos para pantallas más pequeñas */
+  .aja{
+    display: flex; /* Mostrar el elemento con la clase .aja */
+     /* Anula las filas de la cuadrícula */
+    gap: 0; /* Anula el espacio entre celdas */
+    /* También puedes anular otras propiedades específicas según tus necesidades */
+    justify-content: space-between;
+    margin-top: 0;
+  }
+  .gridd{
+    display: grid;
+    grid-template-columns: 200px 85px 85px;
+  }
+}
+
+@media (min-width: 768px) {
+  /* Estilos para pantallas más pequeñas */
+  .aja{
+    display: flex; /* Mostrar el elemento con la clase .aja */
+     /* Anula las filas de la cuadrícula */
+    gap: 0; /* Anula el espacio entre celdas */
+    /* También puedes anular otras propiedades específicas según tus necesidades */
+    justify-content: space-between;
+    margin-top: 0;
+  }
+  .gridd{
+    display: grid;
+    grid-template-columns: 200px 85px 85px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Estilos para pantallas más pequeñas */
+  .aja{
+    display: flex; /* Mostrar el elemento con la clase .aja */
+     /* Anula las filas de la cuadrícula */
+    gap: 0; /* Anula el espacio entre celdas */
+    /* También puedes anular otras propiedades específicas según tus necesidades */
+    justify-content: space-between;
+    margin-top: 0;
+  }
+  .gridd{
+    display: block;
+  }
 }
